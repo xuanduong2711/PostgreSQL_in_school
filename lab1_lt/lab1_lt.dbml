@@ -1,0 +1,91 @@
+
+Table "khoa" {
+  "khoa_id" SERIAL [pk, increment]
+  "ten_khoa" VARCHAR(20) [not null]
+  "nam" INTEGER
+  "phong" INTEGER
+  "dien_thoai" "CHAR (11)"
+  "truong_khoa" INTEGER
+}
+
+Table "bo_mon" {
+  "bo_mon_id" SERIAL [pk, increment]
+  "ten_bo_mon" VARCHAR(20) [not null]
+  "phong" INTEGER
+  "dien_thoai" "CHAR (11)"
+  "khoa_id" INTEGER
+  "truong_bo_mon" INTEGER
+}
+
+Table "giang_vien" {
+  "giang_vien_id" SERIAL [pk, increment]
+  "ho_va_ten" VARCHAR(40)
+  "gioi_tinh" "CHAR (1)"
+  "ngay_sinh" DATE
+  "tham_gia" "CHAR (1)" [default: '1']
+  "bo_mon_id" INTEGER
+  "quan_ly" INTEGER
+}
+
+Table "chu_de_nckh" {
+  "chu_de_id" SERIAL [pk, increment]
+  "ten_chu_de" VARCHAR(100) [not null]
+}
+
+Table "de_tai" {
+  "de_tai_id" SERIAL [pk, increment]
+  "ten_de_tai" VARCHAR(100)
+  "kinh_phi" INTEGER
+  "cap_quan_li" VARCHAR(20)
+  "ngay_bat_dau" DATE
+  "ngay_ket_thuc" DATE
+  "chu_de_id" INTEGER
+  "chu_nhiem" INTEGER
+}
+
+Table "cong_viec" {
+  "cong_viec_id" SERIAL [pk, increment]
+  "de_tai_id" INTEGER
+  "ten_cong_viec" VARCHAR(20)
+  "ngay_bat_dau" DATE
+  "ngay_ket_thuc" DATE
+}
+
+Table "danh_gia" {
+  "cong_viec_id" INTEGER
+  "giang_vien_id" INTEGER
+  "phu_cap" INTEGER
+  "ket_qua" BOOLEAN
+
+  Indexes {
+    (cong_viec_id, giang_vien_id) [pk]
+  }
+}
+
+Ref:"khoa"."khoa_id" < "bo_mon"."khoa_id" [delete: cascade]
+
+Ref:"bo_mon"."bo_mon_id" < "giang_vien"."bo_mon_id" [delete: cascade]
+
+Ref:"giang_vien"."giang_vien_id" < "giang_vien"."quan_ly" [delete: set null]
+
+Ref "fk_truong_khoa":"giang_vien"."giang_vien_id" < "khoa"."truong_khoa" [delete: cascade]
+
+Ref "fk_truong_bo_mon":"giang_vien"."giang_vien_id" < "bo_mon"."truong_bo_mon" [delete: set null]
+
+Ref:"chu_de_nckh"."chu_de_id" < "de_tai"."chu_de_id" [delete: cascade]
+
+Ref:"giang_vien"."giang_vien_id" < "de_tai"."chu_nhiem" [delete: set null]
+
+Ref:"de_tai"."de_tai_id" < "cong_viec"."de_tai_id" [delete: cascade]
+
+Ref:"cong_viec"."cong_viec_id" < "danh_gia"."cong_viec_id" [delete: cascade]
+
+Ref:"giang_vien"."giang_vien_id" < "danh_gia"."giang_vien_id" [delete: cascade]
+
+
+
+Ref: "de_tai"."chu_nhiem" < "de_tai"."chu_de_id"
+
+Ref: "bo_mon"."bo_mon_id" < "bo_mon"."dien_thoai"
+
+Ref: "bo_mon"."bo_mon_id" < "bo_mon"."phong"

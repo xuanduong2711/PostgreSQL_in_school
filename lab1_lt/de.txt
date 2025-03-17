@@ -1,0 +1,31 @@
+	Trường đại học cần xây dựng một hệ thống quản lý giảng viên và các đề tài nghiên
+cứu khoa học (NCKH) mà họ tham gia. Hãy thiết kế database để quản lý các thông tin
+được mô tả sau đây.
+
+	Trường có nhiều khoa, mỗi khoa có mã khoa để xác định duy nhất một khoa, có
+tên khoa, năm thành lập, phòng, điện thoại. Mỗi khoa do 1 giảng viên làm trưởng khoa. 1
+giảng viên không đồng thời làm trưởng của nhiều khoa.
+
+	Mỗi khoa quản lý nhiều bộ môn, nhưng mỗi bộ môn chỉ thuộc một khoa duy nhất
+quản lý. Mỗi bộ môn có mã bộ môn, tên bộ môn, phòng, điện thoại. Mỗi bộ môn do 1
+giảng viên làm trưởng bộ môn. 1 giảng viên không đồng thời làm trưởng của nhiều bộ
+môn.
+
+	Mỗi bộ môn quản lý nhiều giảng viên, nhưng mỗi giảng viên chỉ thuộc một bộ
+môn duy nhất quản lý. Mỗi giảng viên có một mã số duy nhất, có họ tên, thuộc một phái,
+có một ngày sinh, điện thoại, giảng viên được quản lý bởi giảng viên quản lý chuyên
+môn.
+
+	Một số giảng viên tham gia nghiên cứu khoa học. Các chủ đề NCKH gồm thông
+tin mã chủ đề, tên chủ đề.
+
+	Mỗi chủ đề có thể thực hiện nhiều đề tài nghiên cứu. Các đề tài cần lưu các thông
+tin như mã đề tài, tên đề tài, kinh phí, cấp quản lý, ngày bắt đầu, ngày kết thúc. Mỗi đề tài
+có 1 giảng viên chủ nhiệm đề tài. Một giảng viên có thể đồng thời chủ nhiệm nhiều đề tài.
+
+	Mỗi đề tài bao gồm nhiều công việc cần thực hiện. Cần lưu thông tin về các công
+việc trong từng đề tài như số thứ tự công việc, tên công việc, ngày bắt đầu, ngày kết thúc.
+
+	Các giảng viên có thể tham gia nhiều công việc trong các đề tài. Hệ thống cần lưu
+thông tin về việc tham gia đề tài của giảng viên như phụ cấp và kết quả của mỗi công
+việc trong mỗi đề tài mà giảng viên đó tham gia.
