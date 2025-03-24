@@ -111,9 +111,9 @@ FROM    employees e
         ON e.job_id = j.job_id
 WHERE   j.job_title NOT LIKE 'Programmer' OR
         j.job_title NOT LIKE 'Shipping Clerk' OR
-        e.salary = 4500 OR
-        e.salary = 10000 OR
-        e.salary = 15000; 
+        e.salary != 4500 OR
+        e.salary != 10000 OR
+        e.salary != 15000; 
 
 --u
 SELECT  d.department_name, AVG(e.salary) AS luong_trung_binh
@@ -131,14 +131,20 @@ FROM    employees e
 GROUP BY j.job_title,  e.salary ;
 
 --w
-SELECT e.first_name, e.last_name, d.department_name, c.country_name
+SELECT 
+    m.first_name AS manager_first_name, 
+    m.last_name AS manager_last_name, 
+    d.department_name, 
+    l.city
 FROM employees e
-    JOIN departments d
-    ON e.department_id = d.department_id
-    JOIN locations l
-    ON d.location_id = l.location_id
-    JOIN countries c
-    ON l.country_id = c.country_id;
+        JOIN departments d 
+        ON e.department_id = d.department_id
+        JOIN locations l 
+        ON d.location_id = l.location_id
+        JOIN employees m 
+        ON e.manager_id = m.employee_id
+WHERE m.manager_id is not null
+GROUP BY m.first_name, m.last_name, d.department_name, l.city;
 
 --x
 SELECT  j.job_title, e.first_name, e.last_name, 
@@ -148,6 +154,5 @@ FROM    employees e
         ON e.job_id = j.job_id
 ORDER BY chenh_lech_luong_voi_luong_thap_nhat DESC
 LIMIT 3;
-
 
 
