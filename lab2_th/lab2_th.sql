@@ -1,3 +1,73 @@
+--cau 1
+CREATE ROLE hradmin WITH LOGIN PASSWORD '123';
+
+-- cau 2
+CREATE DATABASE hr 
+WITH OWNER hradmin;
+
+--Cau 3
+CREATE SCHEMA hrschema AUTHORIZATION hradmin;
+
+
+--Cau 4
+CREATE TABLE    regions (
+    region_id       INT PRIMARY KEY,
+    region_name     VARCHAR(50)
+);
+
+CREATE TABLE    countries (
+    country_id      VARCHAR(5) PRIMARY KEY,
+    country_name    VARCHAR(50),
+    region_id       INT REFERENCES regions(region_id)
+);
+
+CREATE TABLE    locations (
+    location_id     INT PRIMARY KEY,
+    street_address  VARCHAR(50),
+    postal_code     VARCHAR(50),
+    city            VARCHAR(50),
+    state_province  VARCHAR(50),
+    country_id      VARCHAR(5) REFERENCES countries(country_id)
+);
+
+CREATE TABLE    departments (
+    department_id   INT PRIMARY KEY,
+    department_name VARCHAR(50),
+    location_id     INT REFERENCES locations(location_id)
+);
+
+CREATE TABLE jobs (
+    job_id      INT PRIMARY KEY,
+    job_title   VARCHAR(50) NOT NULL,
+    min_salary  DECIMAL(8, 2),
+    max_salary  DECIMAL(8, 2)
+);
+
+CREATE TABLE employees (
+    employee_id     INT PRIMARY KEY,
+    first_name      VARCHAR(50),
+    last_name       VARCHAR(50),
+    email           VARCHAR(50),
+    phone_number    VARCHAR(50),
+    hire_date       DATE,
+    job_id          INT REFERENCES jobs(job_id),
+    salary          DECIMAL(8,2),
+    commission_pct  DECIMAL(8,2),
+    manager_id      INT REFERENCES employees(employee_id),
+    department_id   INT REFERENCES departments(department_id)
+);
+
+CREATE TABLE job_history (
+    employee_id     INT,
+    start_date      DATE,
+    end_date        DATE,
+    job_id          INT REFERENCES jobs(job_id),
+    department_id   INT REFERENCES departments(department_id),
+    PRIMARY KEY (employee_id, start_date) 
+);
+
+--Cau 5
+\i 'C:/Users/Admin/OneDrive - VNU-HCMUS/2022-2026/Nam 3/HQTCSDL/lab2_th/hr_data.sql'
 
 --Cau 6
 --a
@@ -111,9 +181,9 @@ FROM    employees e
         ON e.job_id = j.job_id
 WHERE   j.job_title NOT LIKE 'Programmer' OR
         j.job_title NOT LIKE 'Shipping Clerk' OR
-        e.salary != 4500 OR
-        e.salary != 10000 OR
-        e.salary != 15000; 
+        e.salary = 4500 OR
+        e.salary = 10000 OR
+        e.salary = 15000; 
 
 --u
 SELECT  d.department_name, AVG(e.salary) AS luong_trung_binh
@@ -131,28 +201,23 @@ FROM    employees e
 GROUP BY j.job_title,  e.salary ;
 
 --w
-SELECT 
-    m.first_name AS manager_first_name, 
-    m.last_name AS manager_last_name, 
-    d.department_name, 
-    l.city
+SELECT e.first_name, e.last_name, d.department_name, c.country_name
 FROM employees e
-        JOIN departments d 
-        ON e.department_id = d.department_id
-        JOIN locations l 
-        ON d.location_id = l.location_id
-        JOIN employees m 
-        ON e.manager_id = m.employee_id
-WHERE m.manager_id is not null
-GROUP BY m.first_name, m.last_name, d.department_name, l.city;
+    JOIN departments d
+    ON e.department_id = d.department_id
+    JOIN locations l
+    ON d.location_id = l.location_id
+    JOIN countries c
+    ON l.country_id = c.country_id;
 
 --x
-SELECT  j.job_title, e.first_name, e.last_name, 
-        e.salary - (SELECT MIN(salary) FROM employees) AS chenh_lech_luong_voi_luong_thap_nhat
+SELECT  j.job_title, e.first_name, e.last_name, MAX(e.salary) - MIN(e.salary) AS chenh_lech_luong
 FROM    employees e
         JOIN jobs j
         ON e.job_id = j.job_id
-ORDER BY chenh_lech_luong_voi_luong_thap_nhat DESC
+GROUP BY j.job_title, e.first_name, e.last_name
+ORDER BY chenh_lech_luong DESC
 LIMIT 3;
+
 
 
