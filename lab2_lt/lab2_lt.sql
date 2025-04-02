@@ -128,9 +128,7 @@ FROM tourist_attraction t
 WHERE t.open_flag = TRUE;
 
 -- 2.3
-SELECT 
-    o.attraction_name, 
-    c.city_name
+SELECT o.attraction_name, c.city_name
 FROM open_tourist_attraction o
     JOIN capital_city c 
     ON o.attraction_city_id = c.city_id

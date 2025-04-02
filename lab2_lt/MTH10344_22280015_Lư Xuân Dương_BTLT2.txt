@@ -1,0 +1,43 @@
+
+-- 1.1
+-- Em nghĩ sẽ trả về 4 dòng
+SELECT p.planet_id, p.planet_name, r.ring_tot
+FROM planet p
+    JOIN ring r
+    ON p.planet_id = r.planet_id;
+
+--1.2
+-- Em nghĩ sẽ trả về 8 dòng
+SELECT p.planet_id, p.planet_name, r.ring_tot
+FROM planet p
+    LEFT JOIN ring r
+    ON p.planet_id = r.planet_id;
+
+--1.3
+SELECT p.planet_id, p.planet_name, r.ring_tot AS rings
+FROM planet p
+LEFT JOIN ring r ON p.planet_id = r.planet_id;
+
+-- 2.1
+SELECT t.attraction_name, c.city_name, p.province_name
+FROM tourist_attraction t
+    JOIN capital_city c 
+    ON t.attraction_city_id = c.city_id
+    JOIN province p 
+    ON c.province_id = p.province_id
+WHERE t.open_flag = TRUE;
+
+-- 2.2
+CREATE TEMPORARY TABLE open_tourist_attraction AS 
+SELECT t.attraction_city_id,  t.attraction_name
+FROM tourist_attraction t
+    JOIN capital_city c 
+    ON t.attraction_city_id = c.city_id
+WHERE t.open_flag = TRUE;
+
+-- 2.3
+SELECT o.attraction_name, c.city_name
+FROM open_tourist_attraction o
+    JOIN capital_city c 
+    ON o.attraction_city_id = c.city_id
+WHERE c.city_name = 'Toronto';
